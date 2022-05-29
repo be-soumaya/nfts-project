@@ -32,7 +32,11 @@ CORS_ORIGIN_WHITELIST = (
     'http://localhost:8081',
 )
 # Application definition
-
+ELASTICSEARCH_DSL={
+    'default': {
+        'hosts': 'localhost:9200'
+    },
+}
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -43,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'DjangoApp',
     'corsheaders',
+    'django_elasticsearch_dsl'
 ]
 
 MIDDLEWARE = [
