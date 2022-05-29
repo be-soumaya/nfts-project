@@ -36,7 +36,7 @@ def collection_list(request):
         blockchain = request.GET.get('blockchain', None)
       
         if blockchain is not None:
-            docs = collection.find({"blockchain": blockchain})
+            docs = collection.find({"blockchain": int(blockchain)})
      
         data = json.loads(dumps(docs)) 
         return JsonResponse(data, safe=False)
