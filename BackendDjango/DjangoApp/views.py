@@ -36,12 +36,12 @@ def collection_list(request):
         blockchain = request.GET.get('blockchain', None)
       
         if blockchain is not None:
-            docs = collection.find({"blockchain": int(blockchain)})
+            docs = collection.find({"blockchain": blockchain})
      
         data = json.loads(dumps(docs)) 
         return JsonResponse(data, safe=False)
-        # 'safe=False' for objects serialization
-
+        # 'safe=False' for objects serialization  
+ 
 @api_view(['GET', 'POST'])
 def nft_list(request):
     if request.method == 'GET':
