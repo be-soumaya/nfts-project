@@ -1,13 +1,43 @@
-from django_elasticsearch_dsl import Document
-from django_elasticsearch_dsl.registries import registry
+from django_elasticsearch_dsl import Document,fields,Index
 
 from DjangoApp.models import *
 
-@registry.register_document
+PUBLISHER_INDEX_block=Index('blockchain')
+
+PUBLISHER_INDEX_block.settings(
+    number_of_shards=1,
+    number_of_replicas=1
+)
+PUBLISHER_INDEX_coll=Index('collection')
+
+PUBLISHER_INDEX_coll.settings(
+    number_of_shards=1,
+    number_of_replicas=1
+)
+PUBLISHER_INDEX_nft=Index('nft')
+
+PUBLISHER_INDEX_nft.settings(
+    number_of_shards=1,
+    number_of_replicas=1
+)
+
+
+# @registry.register_document
+# class BlockchainDocument(Document):
+#     class Index:
+#         name ='blockchains'
+#         settings = {'number_of_shards':1,'number_of_replicas':0}
+
+#     class Django :
+#         model= Blockchain
+
+#         fields = [
+#             'name',
+#             'id'
+#         ]
+
+@PUBLISHER_INDEX_block.doc_type
 class BlockchainDocument(Document):
-    class Index:
-        name ='blockchains'
-        settings = {'number_of_shards':1,'number_of_replicas':0}
 
     class Django :
         model= Blockchain
@@ -17,11 +47,9 @@ class BlockchainDocument(Document):
             'id'
         ]
 
-@registry.register_document
+
+@PUBLISHER_INDEX_coll.doc_type
 class CollectionDocument(Document):
-    class Index:
-        name ='collections'
-        settings = {'number_of_shards':1,'number_of_replicas':0}
 
     class Django :
         model= Collection
@@ -33,14 +61,12 @@ class CollectionDocument(Document):
             'Owners',
             'items',
             'blockchain',
-            'currency'
+            'currency',
+            'id'
         ]
 
-@registry.register_document
+@PUBLISHER_INDEX_nft.doc_type
 class NftDocument(Document):
-    class Index:
-        name ='nfts'
-        settings = {'number_of_shards':1,'number_of_replicas':0}
 
     class Django :
         model= Nft
@@ -50,5 +76,7 @@ class NftDocument(Document):
             'collection',
             'last_price',
             'currency',
-            'blockchain'
+            'blockchain',
+            'id'
         ]
+

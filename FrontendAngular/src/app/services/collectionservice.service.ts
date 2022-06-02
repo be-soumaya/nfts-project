@@ -7,7 +7,7 @@ import { Collection } from '../models/collection.model';
 import { Nft } from '../models/nft.model';
 import { Currency } from '../models/currency.model';
 
-const baseUrl = 'http://localhost:8000/api/collections';
+const baseUrl = 'http://localhost:8000/search_collection/';
 @Injectable({
   providedIn: 'root'
 })
@@ -18,6 +18,6 @@ export class CollectionserviceService {
   }
   
   findByBlockchain(blockchain: any): Observable<Collection[]> {
-    return this.http.get<Collection[]>(`${baseUrl}?blockchain=${blockchain}`);
+    return this.http.get<Collection[]>(`${baseUrl}?search=${blockchain}`);
   }
 }

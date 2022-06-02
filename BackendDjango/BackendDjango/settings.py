@@ -34,7 +34,7 @@ CORS_ORIGIN_WHITELIST = (
 # Application definition
 ELASTICSEARCH_DSL={
     'default': {
-        'hosts': 'localhost:9200'
+        'hosts': 'http://elastic:elasticadmin@localhost:9200'
     },
 }
 INSTALLED_APPS = [
@@ -87,16 +87,16 @@ WSGI_APPLICATION = 'BackendDjango.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'djongo',
-        'NAME':'DjangoDB',
-        'ENFORCE_SCHEMA': False,
-        'CLIENT': {
-            'host': 'mongodb+srv://soumaya:soumaya1Atlas@cluster0.y9xab.mongodb.net/test?retryWrites=true&w=majority'
-        }  
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'djongo',
+#         'NAME':'DjangoDB',
+#         'ENFORCE_SCHEMA': False,
+#         'CLIENT': {
+#             'host': 'mongodb+srv://soumaya:soumaya1Atlas@cluster0.y9xab.mongodb.net/test?retryWrites=true&w=majority'
+#         }  
+#     }
+# }
 
 
 # Password validation
