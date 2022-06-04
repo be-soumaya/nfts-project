@@ -1,37 +1,37 @@
 <div class="main-content">
-    <div class="container-fluid">
-         <div class="row">
-            
-          <mat-form-field appearance="fill">
+  <div class="container-fluid">
+    <div class="row">
+      <mat-form-field appearance="fill">
+        <mat-label>Select a Blockchain</mat-label>
 
-            <mat-label>Select an option</mat-label>
-          
-            <mat-select [(ngModel)]="selectedBlockchain" (selectionChange)="onSelectBlockchain($event.value)" >
-              <mat-option *ngFor="let item of blockchain" [value]="item.name">{{item.name}}</mat-option>
-            </mat-select>
-          
-          </mat-form-field>
-          
-          
-          
-           <mat-form-field appearance="fill" style="margin-left: 20px;">
-          
-            <mat-label>Select an option</mat-label>
-          
-            <mat-select [(ngModel)]="selectedCollection" (selectionChange)="onSelectCollection($event.value)">
-              <mat-option *ngFor="let item of collection" [value]="item.name" >{{item.name}}</mat-option>
-            </mat-select>
-            
-          </mat-form-field> 
-            
-        </div>
-        
-        <div class="row">
+        <mat-select
+          [(ngModel)]="selectedBlockchain"
+          (selectionChange)="onSelectBlockchain($event.value)"
+        >
+          <mat-option *ngFor="let item of blockchain" [value]="item.name">{{
+            item.name
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-        </div>
-       
-        <div class="row">
-            <!-- <div class="div">
+      <mat-form-field appearance="fill" style="margin-left: 20px">
+        <mat-label>Select a Collection</mat-label>
+
+        <mat-select
+          [(ngModel)]="selectedCollection"
+          (selectionChange)="onSelectCollection($event.value)"
+        >
+          <mat-option *ngFor="let item of collection" [value]="item.name">{{
+            item.name
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="row"></div>
+
+    <div class="row">
+      <!-- <div class="div">
 
                 <div class="container-fluid py-3">
                     <h1>Angular Highcharts</h1>
@@ -44,9 +44,15 @@
                     </div>
             </div> -->
 
-            <h1 style="text-align:center">HighChart For Bar Chart </h1>
-            <div class="col-8" id="container"></div>
-        </div>
-        
+      <h1 style="text-align: center">Charts About Collections</h1>
+      <div class="col-8" id="containerBar"></div>
     </div>
+    <div class="row">
+      <div class="col-8" id="containerColumn"></div>
+    </div>
+    <div class="row">
+      <div class="col-md-7" id="containerScatter"></div>
+      <div class="col-md-5" id="containerPie"></div>
+    </div>
+  </div>
 </div>

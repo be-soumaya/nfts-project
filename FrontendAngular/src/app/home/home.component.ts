@@ -1,45 +1,37 @@
-import { Component, OnInit } from '@angular/core';
-import { Blockchain } from 'app/models/blockchain.model';
-import { Collection } from 'app/models/collection.model';
-import { Nft } from 'app/models/nft.model';
-import { CollectionserviceService } from 'app/services/collectionservice.service';
+import { Component, OnInit } from "@angular/core";
+import { Blockchain } from "app/models/blockchain.model";
+import { Collection } from "app/models/collection.model";
+import { Nft } from "app/models/nft.model";
+import { CollectionserviceService } from "app/services/collectionservice.service";
 
-
-import * as Highcharts from 'highcharts';
+import * as Highcharts from "highcharts";
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  selector: "app-home",
+  templateUrl: "./home.component.html",
+  styleUrls: ["./home.component.css"],
 })
 export class HomeComponent implements OnInit {
-
   collection?: Collection[];
   blockchain?: Blockchain[];
   nft?: Nft[];
-  
-  selectedBlockchain = '';
-  selectedCollection = '';
 
-  
+  selectedBlockchain = "";
+  selectedCollection = "";
 
-  constructor(private collectionserviceService: CollectionserviceService) { }
-  
+  constructor(private collectionserviceService: CollectionserviceService) {}
+
   ngOnInit() {
-    
-   this.retrieveBlockchain();
-   Highcharts.chart('container', this.options);
-   //this.createChartLine();
+    this.retrieveBlockchain();
+    // Highcharts.chart("container", this.options);
+    //this.createChartLine();
   }
-
-  
 
   retrieveBlockchain(): void {
     this.collectionserviceService.getAllBlockchains().subscribe(
       (data) => {
         this.blockchain = data;
         console.log(data);
-        
       },
       (error) => {
         console.log(error);
@@ -47,118 +39,311 @@ export class HomeComponent implements OnInit {
     );
   }
 
-  onSelectBlockchain(value: any){
+  onSelectBlockchain(value: any) {
     console.log(value);
     this.searchCollections();
+    // Highcharts.chart("container", this.options);
   }
-  onSelectCollection(value: any){
+  onSelectCollection(value: any) {
     console.log(value);
     this.searchNfts();
   }
 
-  
-
   searchCollections(): void {
     // this.currentCollection = {};
-     //this.currentIndex = -1;
- 
-     this.collectionserviceService.findByBlockchain(this.selectedBlockchain).subscribe(
-       (data) => {
-         this.collection = data;
-         console.log(data);
-       },
-       (error) => {
-         console.log(error);
-       }
-     );
-   } 
+    //this.currentIndex = -1;
+    let currency: any;
+    let collections_n_fp: any[] = [];
+    let collections_n_v: any[] = [];
+    let collections_n_ow: any[] = [];
+    let collections_n_it: any[] = [];
+    let collections_it_fp: any[] = [];
+    let collections_names: any[] = [];
 
-   searchNfts(): void {
-    // this.currentCollection = {};
-     //this.currentIndex = -1;
- 
-     this.collectionserviceService.findByCollection(this.selectedCollection).subscribe(
-       (data) => {
-         this.nft = data;
-         console.log(data);
-       },
-       (error) => {
-         console.log(error);
-       }
-     );
-   } 
+    this.collectionserviceService
+      .findByBlockchain(this.selectedBlockchain)
+      .subscribe(
+        (data) => {
+          if (
+            this.selectedBlockchain == "ethereum" ||
+            this.selectedBlockchain == "polygon"
+          ) {
+            currency = "eth";
+          } else {
+            currency = "sol";
+          }
+          this.collection = data;
+          console.log(data);
+          data.forEach((element) => {
+            collections_n_fp.push([element["name"], element["floor_price"]]);
+          });
 
+          console.log("cname ", collections_n_fp);
+          let optionsBar: any = {
+            chart: {
+              type: "bar",
+            },
+            title: {
+              text: "Collections By Floor Price",
+            },
+            xAxis: {
+              tickInterval: 1,
+              labels: {
+                enabled: true,
+                formatter: function () {
+                  return collections_n_fp[this.value][0];
+                },
+              },
+              title: {
+                text: "Collections",
+              },
+            },
+            yAxis: {
+              title: {
+                text: "Floor Price (" + currency + ")",
+              },
+            },
+            credits: {
+              enabled: false,
+            },
+            series: [
+              {
+                color: "#39C0C8",
 
+                data: collections_n_fp, //dynamic data
+              },
+            ],
+          };
+          Highcharts.chart("containerBar", optionsBar);
 
-  
-  public options: any = {
-    chart: {
-       type: 'bar'
-    },
-    accessibility: {
-        description: '',
-    },
-    title: {
-       text: 'Historic World Population by Region'
-    },
-    subtitle: {
-        text: 'Sources: Dummy data'
-    },
-    xAxis: {
-        categories: ['Africa', 'America', 'Asia', 'Europe', 'Oceania'],
-        tickmarkPlacement: 'on',
-        title: {
-            enabled: false
-        }
-    },
-    yAxis: {
-        min: 0,
-        title: {
-            text: 'Population (millions)',
-            align: 'high'
+          //SECOND CHART ABOUT COLLECTIONS
+          data.forEach((element) => {
+            collections_n_v.push([element["name"], element["volume"]]);
+          });
+          data.forEach((element) => {
+            collections_names.push(element["name"]);
+          });
+          data.forEach((element) => {
+            collections_n_ow.push([element["name"], element["Owners"]]);
+          });
+          data.forEach((element) => {
+            collections_n_it.push([element["name"], element["items"]]);
+          });
+
+          let optionsColumn: any = {
+            chart: {
+              type: "column",
+            },
+            title: {
+              text: "Collections By Volume and Owners and Items",
+            },
+            xAxis: {
+              categories: collections_names,
+              crosshair: true,
+            },
+
+            tooltip: {
+              headerFormat:
+                '<span style="font-size:10px">{point.key}</span><table>',
+              pointFormat:
+                '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f} </b></td></tr>',
+              footerFormat: "</table>",
+              shared: true,
+              useHTML: true,
+            },
+            plotOptions: {
+              column: {
+                pointPadding: 0.2,
+                borderWidth: 0,
+              },
+            },
+            credits: {
+              enabled: false,
+            },
+            series: [
+              {
+                name: "Volume (eth)",
+                color: "#1AC9E6",
+                data: collections_n_v,
+              },
+              {
+                name: "Owners",
+                color: "#19AADE",
+                data: collections_n_ow,
+              },
+              {
+                name: "Items",
+                color: "#176BA0",
+                data: collections_n_it,
+              },
+            ],
+          };
+          Highcharts.chart("containerColumn", optionsColumn);
+          //SCATTER CHART ABOUT COLLECTIONS
+          data.forEach((element) => {
+            collections_it_fp.push([element["items"], element["floor_price"]]);
+          });
+
+          let optionsScatter: any = {
+            chart: {
+              type: "scatter",
+              zoomType: "xy",
+              width: 700,
+            },
+            title: {
+              text: "Items of collections By Floor price",
+            },
+
+            xAxis: {
+              title: {
+                enabled: true,
+                text: "Floor Price (" + currency + ") ",
+              },
+              startOnTick: true,
+              endOnTick: true,
+              showLastLabel: true,
+            },
+            yAxis: {
+              title: {
+                text: "Items",
+              },
+            },
+
+            credits: {
+              enabled: false,
+            },
+            plotOptions: {
+              scatter: {
+                marker: {
+                  radius: 5,
+                  states: {
+                    hover: {
+                      enabled: true,
+                      lineColor: "rgb(100,100,100)",
+                    },
+                  },
+                },
+                states: {
+                  hover: {
+                    marker: {
+                      enabled: false,
+                    },
+                  },
+                },
+                tooltip: {
+                  headerFormat: "<b>{series.name}</b><br>",
+                  pointFormat: "{point.y} (" + currency + "), {point.x}",
+                },
+              },
+            },
+            series: [
+              {
+                color: "#3AC0DA",
+                data: collections_it_fp,
+              },
+            ],
+          };
+          Highcharts.chart("containerScatter", optionsScatter);
         },
-        labels: {
-            overflow: 'justify'
+        (error) => {
+          console.log(error);
         }
-    },
-    tooltip: {
-        valueSuffix: ' millions'
-    },
-    plotOptions: {
-        bar: {
-            dataLabels: {
-                enabled: true
-            }
-        }
-    },
-    legend: {
-        layout: 'vertical',
-        align: 'right',
-        verticalAlign: 'top',
-        x: -40,
-        y: 80,
-        floating: true,
-        borderWidth: 1,
-        backgroundColor:
-            Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
-        shadow: true
-    },
-    series: [{
-        name: 'Year 1800',
-        data: [107, 31, 635, 203, 2]
-    }, {
-        name: 'Year 1900',
-        data: [133, 156, 947, 408, 6]
-    }, {
-        name: 'Year 2000',
-        data: [814, 841, 3714, 727, 31]
-    }, {
-        name: 'Year 2016',
-        data: [1216, 1001, 4436, 738, 40]
-    }]
+      );
   }
-  
-  
-  
 
+  searchNfts(): void {
+    // this.currentCollection = {};
+    //this.currentIndex = -1;
+    let currency: any;
+    let currencies_n_per: any[] = [];
+    let collections_n_v: any[] = [];
+    this.collectionserviceService
+      .findByCollection(this.selectedCollection)
+      .subscribe(
+        (data) => {
+          this.nft = data;
+          console.log(data);
+          //PIE CHART ABOUT COLLECTIONS
+          let currencies: any[] = [];
+          data.forEach((element) => {
+            currencies.push(element["currency"]);
+          });
+          const totalItems = currencies.length;
+          const uniqueItems = new Set(currencies);
+          uniqueItems.forEach((curCurrency) => {
+            const numItems = currencies.filter(
+              (currency) => currency === curCurrency
+            );
+            currencies_n_per.push([
+              curCurrency,
+              (numItems.length * 100) / totalItems,
+            ]);
+          });
+          console.log("currencies ", currencies_n_per);
+          // Make monochrome colors
+          var pieColors = (function () {
+            var colors = [],
+              base = Highcharts.getOptions().colors[0],
+              i;
+
+            for (i = 0; i < 10; i += 1) {
+              // Start out with a darkened base color (negative brighten), and end
+              // up with a much brighter color
+              colors.push(
+                Highcharts.color(base)
+                  .brighten((i - 3) / 7)
+                  .get()
+              );
+            }
+            return colors;
+          })();
+          let optionsPie: any = {
+            chart: {
+              plotBackgroundColor: null,
+              plotBorderWidth: null,
+              plotShadow: false,
+              type: "pie",
+              width: 500,
+            },
+            title: {
+              text: "Currencies In One Collection",
+            },
+            tooltip: {
+              pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>",
+            },
+            accessibility: {
+              point: {
+                valueSuffix: "%",
+              },
+            },
+            plotOptions: {
+              pie: {
+                allowPointSelect: true,
+                cursor: "pointer",
+                colors: pieColors,
+                dataLabels: {
+                  enabled: true,
+                  format: "<b>{point.name}</b>: {point.percentage:.1f} %",
+                },
+              },
+            },
+            credits: {
+              enabled: false,
+            },
+            series: [
+              {
+                name: "Currencies",
+                colorByPoint: true,
+                data: currencies_n_per,
+              },
+            ],
+          };
+          Highcharts.chart("containerPie", optionsPie);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  }
 }
