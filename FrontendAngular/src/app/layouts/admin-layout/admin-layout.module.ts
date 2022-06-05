@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 
 import { ChartModule } from 'angular-highcharts';
+import { MatDividerModule } from '@angular/material/divider';
 
 import { AdminLayoutRoutes } from './admin-layout.routing';
 
@@ -23,7 +24,8 @@ import { HomeComponent } from '../../home/home.component';
     RouterModule.forChild(AdminLayoutRoutes),
     FormsModule,
     MatSelectModule,
-    ChartModule
+    ChartModule,
+    MatDividerModule
     
   ],
   declarations: [

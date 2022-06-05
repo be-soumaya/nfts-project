@@ -16,7 +16,7 @@ export class HomeComponent implements OnInit {
   nft?: Nft[];
 
   selectedBlockchain = "";
-  selectedCollection = "";
+  selectedCollection = ""; 
 
   constructor(private collectionserviceService: CollectionserviceService) {}
 
@@ -111,7 +111,7 @@ export class HomeComponent implements OnInit {
             series: [
               {
                 color: "#39C0C8",
-
+                showInLegend: false,
                 data: collections_n_fp, //dynamic data
               },
             ],
@@ -167,6 +167,7 @@ export class HomeComponent implements OnInit {
               {
                 name: "Volume (eth)",
                 color: "#1AC9E6",
+                showInLegend: false,
                 data: collections_n_v,
               },
               {
@@ -243,6 +244,8 @@ export class HomeComponent implements OnInit {
               {
                 color: "#3AC0DA",
                 data: collections_it_fp,
+                showInLegend: false,
+
               },
             ],
           };
@@ -302,7 +305,7 @@ export class HomeComponent implements OnInit {
             series: [
               {
                 color: "#39C0C8",
-
+                showInLegend: false,
                 data: nfts_n_lp, //dynamic data
               },
             ],
@@ -333,6 +336,7 @@ export class HomeComponent implements OnInit {
             series: [
               {
                 data: [],
+                showInLegend: false,
               },
             ],
           };
@@ -411,6 +415,8 @@ export class HomeComponent implements OnInit {
                 name: "Currencies",
                 colorByPoint: true,
                 data: currencies_n_per,
+                showInLegend: false,
+
               },
             ],
           };
