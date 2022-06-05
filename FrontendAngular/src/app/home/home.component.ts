@@ -3,8 +3,8 @@ import { Blockchain } from "app/models/blockchain.model";
 import { Collection } from "app/models/collection.model";
 import { Nft } from "app/models/nft.model";
 import { CollectionserviceService } from "app/services/collectionservice.service";
-
 import * as Highcharts from "highcharts";
+
 
 @Component({
   selector: "app-home",
@@ -189,7 +189,7 @@ export class HomeComponent implements OnInit {
             chart: {
               type: "scatter",
               zoomType: "xy",
-              width: 700,
+              // width: 700,
             },
             title: {
               text: "Items of collections By Floor price",
@@ -198,7 +198,7 @@ export class HomeComponent implements OnInit {
             xAxis: {
               title: {
                 enabled: true,
-                text: "Floor Price (" + currency + ") ",
+                text: "Items",
               },
               startOnTick: true,
               endOnTick: true,
@@ -206,7 +206,7 @@ export class HomeComponent implements OnInit {
             },
             yAxis: {
               title: {
-                text: "Items",
+                text: "Floor Price (" + currency + ") ",
               },
             },
 
@@ -253,17 +253,88 @@ export class HomeComponent implements OnInit {
   }
 
   searchNfts(): void {
-    // this.currentCollection = {};
-    //this.currentIndex = -1;
+   
     let currency: any;
     let currencies_n_per: any[] = [];
-    let collections_n_v: any[] = [];
+    let nfts_n_lp: any[] = [];
     this.collectionserviceService
       .findByCollection(this.selectedCollection)
       .subscribe(
         (data) => {
           this.nft = data;
           console.log(data);
+          data.forEach((element) => {
+            nfts_n_lp.push([element["name"], element["last_price"]]);
+            currency=element['currency']
+          });
+
+          console.log("Nname ", nfts_n_lp);
+
+          let optionsBar: any = {
+            chart: {
+              type: "column",
+            },
+            title: {
+              text: "NFTs By Last Price",
+            },
+            xAxis: {
+              tickInterval: 1,
+              labels: {
+                enabled: true,
+                formatter: function () {
+                  return nfts_n_lp[this.value][0];
+                },
+              },
+              title: {
+                text: "NFTs",
+              },
+            },
+            yAxis: {
+              title: {
+                text: "Last Price (" + currency + ")",
+              },
+            },
+            credits: {
+              enabled: false,
+            },
+            series: [
+              {
+                color: "#39C0C8",
+
+                data: nfts_n_lp, //dynamic data
+              },
+            ],
+          };
+          Highcharts.chart("containerBar", optionsBar);
+          let options: any = {chart: {
+            type: "column",
+            width: 1,
+            height:1
+          },
+          title: {
+            text: "",
+          },
+          xAxis: {
+            title: {
+              text: "",
+            },
+          },
+          yAxis: {
+            title: {
+              text: "",
+            },
+          },
+          credits: {
+            enabled: false,
+          },
+          series: [
+            {
+              data: [], 
+            },
+          ],}
+          Highcharts.chart("containerScatter", options);
+          Highcharts.chart("containerColumn", options);
+         
           //PIE CHART ABOUT COLLECTIONS
           let currencies: any[] = [];
           data.forEach((element) => {
@@ -304,7 +375,7 @@ export class HomeComponent implements OnInit {
               plotBorderWidth: null,
               plotShadow: false,
               type: "pie",
-              width: 500,
+              // width: 500,
             },
             title: {
               text: "Currencies In One Collection",

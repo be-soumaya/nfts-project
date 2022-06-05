@@ -37,16 +37,21 @@ ELASTICSEARCH_DSL={
         'hosts': 'http://elastic:elasticadmin@localhost:9200'
     },
 }
+# REST_FRAMEWORK = {
+#     'DEFAULT_PAGINATION_CLASS': 'DjangoApp.custom_headers_pagination.CustomPagination', 
+#     'PAGE_SIZE': 1000,
+# } 
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.staticfiles', 
     'rest_framework',
     'DjangoApp',
-    'corsheaders',
+    'corsheaders', 
     'django_elasticsearch_dsl',
     'django_elasticsearch_dsl_drf'
 

@@ -1,4 +1,4 @@
-from django_elasticsearch_dsl import Document,fields,Index
+from django_elasticsearch_dsl import Document,Index
 
 from DjangoApp.models import *
 
@@ -21,20 +21,6 @@ PUBLISHER_INDEX_nft.settings(
     number_of_replicas=1
 )
 
-
-# @registry.register_document
-# class BlockchainDocument(Document):
-#     class Index:
-#         name ='blockchains'
-#         settings = {'number_of_shards':1,'number_of_replicas':0}
-
-#     class Django :
-#         model= Blockchain
-
-#         fields = [
-#             'name',
-#             'id'
-#         ]
 
 @PUBLISHER_INDEX_block.doc_type
 class BlockchainDocument(Document):
