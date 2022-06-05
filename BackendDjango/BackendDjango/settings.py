@@ -37,10 +37,10 @@ ELASTICSEARCH_DSL={
         'hosts': 'http://elastic:elasticadmin@localhost:9200'
     },
 }
-# REST_FRAMEWORK = {
-#     'DEFAULT_PAGINATION_CLASS': 'DjangoApp.custom_headers_pagination.CustomPagination', 
-#     'PAGE_SIZE': 1000,
-# } 
+REST_FRAMEWORK = {
+    
+    'PAGE_SIZE': 1000,
+} 
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -92,16 +92,16 @@ WSGI_APPLICATION = 'BackendDjango.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'djongo',
-#         'NAME':'DjangoDB',
-#         'ENFORCE_SCHEMA': False,
-#         'CLIENT': {
-#             'host': 'mongodb+srv://soumaya:soumaya1Atlas@cluster0.y9xab.mongodb.net/test?retryWrites=true&w=majority'
-#         }  
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'djongo',
+        'NAME':'DjangoDB',
+        'ENFORCE_SCHEMA': False,
+        'CLIENT': {
+            'host': 'mongodb+srv://soumaya:soumaya1Atlas@cluster0.y9xab.mongodb.net/test?retryWrites=true&w=majority'
+        }  
+    }
+}
 
 
 # Password validation

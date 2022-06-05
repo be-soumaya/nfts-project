@@ -6,12 +6,6 @@ from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from DjangoApp.documents import *
 from DjangoApp.serializers import *
 
-from rest_framework import pagination
-from rest_framework.response import Response
-
-class CustomPagination(pagination.PageNumberPagination):
-    def get_paginated_response(self, data):
-        return Response(data)
 
 class CollectionViewSet(DocumentViewSet):
     document = CollectionDocument

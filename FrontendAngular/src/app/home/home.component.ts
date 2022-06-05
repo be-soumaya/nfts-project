@@ -5,7 +5,6 @@ import { Nft } from "app/models/nft.model";
 import { CollectionserviceService } from "app/services/collectionservice.service";
 import * as Highcharts from "highcharts";
 
-
 @Component({
   selector: "app-home",
   templateUrl: "./home.component.html",
@@ -30,8 +29,9 @@ export class HomeComponent implements OnInit {
   retrieveBlockchain(): void {
     this.collectionserviceService.getAllBlockchains().subscribe(
       (data) => {
-        this.blockchain = data;
-        console.log(data);
+        var jsd = JSON.stringify(data);
+        var js = JSON.parse(jsd);
+        this.blockchain = js.results;
       },
       (error) => {
         console.log(error);
@@ -72,9 +72,11 @@ export class HomeComponent implements OnInit {
           } else {
             currency = "sol";
           }
-          this.collection = data;
-          console.log(data);
-          data.forEach((element) => {
+          var jsd = JSON.stringify(data);
+          var js = JSON.parse(jsd);
+          this.collection = js.results;
+          console.log(this.collection);
+          this.collection.forEach((element) => {
             collections_n_fp.push([element["name"], element["floor_price"]]);
           });
 
@@ -117,16 +119,16 @@ export class HomeComponent implements OnInit {
           Highcharts.chart("containerBar", optionsBar);
 
           //SECOND CHART ABOUT COLLECTIONS
-          data.forEach((element) => {
+          this.collection.forEach((element) => {
             collections_n_v.push([element["name"], element["volume"]]);
           });
-          data.forEach((element) => {
+          this.collection.forEach((element) => {
             collections_names.push(element["name"]);
           });
-          data.forEach((element) => {
+          this.collection.forEach((element) => {
             collections_n_ow.push([element["name"], element["Owners"]]);
           });
-          data.forEach((element) => {
+          this.collection.forEach((element) => {
             collections_n_it.push([element["name"], element["items"]]);
           });
 
@@ -181,7 +183,7 @@ export class HomeComponent implements OnInit {
           };
           Highcharts.chart("containerColumn", optionsColumn);
           //SCATTER CHART ABOUT COLLECTIONS
-          data.forEach((element) => {
+          this.collection.forEach((element) => {
             collections_it_fp.push([element["items"], element["floor_price"]]);
           });
 
@@ -253,7 +255,6 @@ export class HomeComponent implements OnInit {
   }
 
   searchNfts(): void {
-   
     let currency: any;
     let currencies_n_per: any[] = [];
     let nfts_n_lp: any[] = [];
@@ -261,11 +262,12 @@ export class HomeComponent implements OnInit {
       .findByCollection(this.selectedCollection)
       .subscribe(
         (data) => {
-          this.nft = data;
-          console.log(data);
-          data.forEach((element) => {
+          var jsd = JSON.stringify(data);
+          var js = JSON.parse(jsd);
+          this.nft = js.results;
+          this.nft.forEach((element) => {
             nfts_n_lp.push([element["name"], element["last_price"]]);
-            currency=element['currency']
+            currency = element["currency"];
           });
 
           console.log("Nname ", nfts_n_lp);
@@ -306,38 +308,40 @@ export class HomeComponent implements OnInit {
             ],
           };
           Highcharts.chart("containerBar", optionsBar);
-          let options: any = {chart: {
-            type: "column",
-            width: 1,
-            height:1
-          },
-          title: {
-            text: "",
-          },
-          xAxis: {
+          let options: any = {
+            chart: {
+              type: "column",
+              width: 1,
+              height: 1,
+            },
             title: {
               text: "",
             },
-          },
-          yAxis: {
-            title: {
-              text: "",
+            xAxis: {
+              title: {
+                text: "",
+              },
             },
-          },
-          credits: {
-            enabled: false,
-          },
-          series: [
-            {
-              data: [], 
+            yAxis: {
+              title: {
+                text: "",
+              },
             },
-          ],}
+            credits: {
+              enabled: false,
+            },
+            series: [
+              {
+                data: [],
+              },
+            ],
+          };
           Highcharts.chart("containerScatter", options);
           Highcharts.chart("containerColumn", options);
-         
+
           //PIE CHART ABOUT COLLECTIONS
           let currencies: any[] = [];
-          data.forEach((element) => {
+          this.nft.forEach((element) => {
             currencies.push(element["currency"]);
           });
           const totalItems = currencies.length;
